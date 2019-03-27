@@ -1,5 +1,5 @@
 # LearnOpengl
-This is just a project for me to start my OpenGL Journey
+This is just a project for me to start my OpenGL Journey\n
 Feel free to point out problems in scripts
 
 Tools I use : GLAD, GLFW
