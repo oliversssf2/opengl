@@ -1,6 +1,7 @@
 //
-// Created by fongsu on 3/29/19.
+// Created by fongsu on 4/1/19.
 //
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -26,12 +27,18 @@ const char *fragmentShaderSource = "#version 330 core\n"
                                    "void main()\n"
                                    "{\n"
                                    "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);"
-								   "}\n\0";
+                                   "}\n\0";
 
 float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
+		-0.5f, -0.5f, 0.0f
+		-0.5f, 0.5f, 0.0f
+};
+
+unsigned int indices[] = {
+		0, 1, 3,
+		1, 2, 3
 };
 
 int main() {
@@ -54,6 +61,8 @@ int main() {
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	//----------------------
+	//end glfw window creation
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -61,6 +70,14 @@ int main() {
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+	//--------------------------
+	//end loading glad
+
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
@@ -135,7 +152,10 @@ int main() {
 
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
